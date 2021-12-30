@@ -1,0 +1,47 @@
+[
+    {
+        "name": "test name",
+        "price": "55.45",
+        "description": "test description",
+        "ratings": 4.5,
+        "images": [{
+            "public_id":"test public_id",
+            "url": "http://testurl"
+        }],
+        "category": "Cameras",
+        "seller": "testseller",
+        "stock": 43,
+        "numOfReviews": 23,
+        "reviews": []
+    },
+    {
+        "name": "apple",
+        "price": "99.45",
+        "description": "test description2",
+        "ratings": 2.5,
+        "images": [{
+            "public_id":"test public_id2",
+            "url": "http://testurl2"
+        }],
+        "category": "Books",
+        "seller": "testseller2",
+        "stock": 22,
+        "numOfReviews": 2322,
+        "reviews": []
+    },
+    {
+        "name": "apple watch",
+        "price": "72.3",
+        "description": "test description3",
+        "ratings": 3.5,
+        "images": [{
+            "public_id":"test public_id3",
+            "url": "http://testurl3"
+        }],
+        "category": "Electronics",
+        "seller": "testseller3",
+        "stock": 33,
+        "numOfReviews": 3333,
+        "reviews": []
+    }
+]
