@@ -31,7 +31,7 @@ const ProcessOrder = () => {
     let isPaid = false;
 
     if(paymentInfo) {
-        if(paymentInfo.status === 'COD' || paymentInfo.status === 'succeeded') {
+        if(paymentInfo.status === 'COD' || paymentInfo.status === 'success') {
             isPaid = true;
         } else {
             isPaid = false;

@@ -152,7 +152,19 @@ const ProductDetails = () => {
 
                             <hr />
 
-                            <p id="product_price">₹ {product.price}</p>
+                            <div className="d-flex">
+                                {product.offerPercentage > 0 ? (
+                                    <Fragment>
+                                        <p className="me-2" id="" style={{textDecoration:'line-through', color:'#9c9ea1'}}>₹ {product.price}</p>
+                                        <h5 className="me-3">Buy now at only</h5>
+                                        <p id="product_price" style={{color: 'green'}}>₹ {product.offerPrice}</p>
+                                    </Fragment>
+                                ) : (
+                                    <p id="product_price">₹ {product.price}</p>
+
+                                )}
+                            </div>
+                            {product.offerDetails && <p>{product.offerDetails}</p>}
                             <div className="stockCounter d-inline">
                                 <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
 
@@ -160,7 +172,7 @@ const ProductDetails = () => {
 
                                 <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
                             </div>
-                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={product.stock === 0} onClick={addToCart}>Add to Cart</button>
+                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={product.stock <= 0 ? true : false} onClick={addToCart}>Add to Cart</button>
 
                             <hr />
 
@@ -208,8 +220,8 @@ const ProductDetails = () => {
                                                     </ul>
 
                                                     <textarea name="review" id="review"
-                                                     className="form-control mt-3" value={comment}
-                                                     onChange={(e) => setComment(e.target.value)}>
+                                                        className="form-control mt-3" value={comment}
+                                                        onChange={(e) => setComment(e.target.value)}>
 
                                                     </textarea>
 

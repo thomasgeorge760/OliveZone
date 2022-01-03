@@ -30,6 +30,11 @@ const UpdateProduct = () => {
     const [oldImages, setOldImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([]);
 
+    //offer section
+    const [offerPercentage, setOfferPercentage] = useState(0);
+    const [offerPrice, setOfferPrice] = useState(0);
+    const [offerDetails, setOfferDetails] = useState('');
+
     const productId = params.id;
 
     const categories = [
@@ -60,6 +65,9 @@ const UpdateProduct = () => {
             setStock(product.stock);
             setSeller(product.seller);
             setOldImages(product.images);
+            setOfferPercentage(product.offerPercentage);
+            setOfferDetails(product.offerDetails);
+            setOfferPrice(product.offerPrice);
         }
 
         if (error) {
@@ -76,7 +84,10 @@ const UpdateProduct = () => {
         if (isUpdated) {
             navigate('/admin/products');
             alert.success('product updated successfully');
+            dispatch(getProductDetails(productId))
+
             dispatch({
+                
                 type: UPDATE_PRODUCT_RESET
             })
         }
@@ -93,6 +104,9 @@ const UpdateProduct = () => {
         formData.set('category', category);
         formData.set('stock', stock);
         formData.set('seller', seller);
+        formData.set('offerPercentage',offerPercentage);
+        formData.set('offerDetails', offerDetails);
+        formData.set('offerPrice',offerPrice);
 
         images.forEach(image => {
             formData.append('images', image)
@@ -127,6 +141,12 @@ const UpdateProduct = () => {
 
 
 
+    }
+
+    //calculating offer price
+
+    const calculateOfferPrice = () => {
+        setOfferPrice((product.price-(offerPercentage*product.price/100)).toFixed(2));
     }
 
 
@@ -202,6 +222,32 @@ const UpdateProduct = () => {
                                                 className="form-control"
                                                 value={stock}
                                                 onChange={(e) => setStock(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="stock_field">Offer Percentage</label>
+                                            <input
+                                                type="number"
+                                                id="stock_field"
+                                                className="form-control"
+                                                value={offerPercentage}
+                                                onChange={(e) => {
+                                                    setOfferPercentage(e.target.value)
+                                                    calculateOfferPrice()
+                                                }}
+                                            />
+                                            {offerPrice && <p>effective product price : {offerPrice}</p>}
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="seller_field">Offer Details</label>
+                                            <input
+                                                type="text"
+                                                id="seller_field"
+                                                className="form-control"
+                                                value={offerDetails}
+                                                onChange={(e) => setOfferDetails(e.target.value)}
                                             />
                                         </div>
 

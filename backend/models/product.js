@@ -13,6 +13,16 @@ const productSchema = new mongoose.Schema({
         default: 0.0,
         maxLength: [5, 'product name cannot exceed 5 char']
     },
+    offerPrice: {
+        type: Number
+    },
+    offerPercentage: {
+      type: Number,
+      default: 0
+    },
+    offerDetails: {
+        type: String
+    },
     description: {
         type: String,
         required: [true, 'enter product description'],

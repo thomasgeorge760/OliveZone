@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useRef, useCallback, useEffect, useState } from 'react'
 
 import MetaData from '../layouts/MetaData'
 
@@ -6,6 +6,35 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { register, clearErrors } from '../../actions/userActions'
 import { useNavigate } from 'react-router-dom'
+
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
+// function generateDownload(canvas, crop) {
+//     if (!crop || !canvas) {
+//         return;
+//     }
+
+//     const data = canvas.toDataURL();
+
+
+//     console.log(data.split('base64,')[1])
+
+//     canvas.toBlob(
+//         (blob) => {
+//             const previewUrl = window.URL.createObjectURL(blob);
+            
+//             const anchor = document.createElement('a');
+//             anchor.download = 'cropPreview.png';
+//             anchor.href = URL.createObjectURL(blob);
+//             anchor.click();
+
+//             window.URL.revokeObjectURL(previewUrl);
+//         },
+//         'image/png',
+//         1
+//     );
+// }
 
 const Register = () => {
 
@@ -19,14 +48,83 @@ const Register = () => {
 
     const [avatar, setAvatar] = useState('https://res.cloudinary.com/deb6scajo/image/upload/v1640784817/avatars/sample_dp_luhfir.png');
 
-    //must add a default avatar before production stage
-    const [avatarPreview, setAvatarPreview] = useState('https://res.cloudinary.com/deb6scajo/image/upload/v1640784817/avatars/sample_dp_luhfir.png');
+//  const [avatarPreview, setAvatarPreview] = useState('https://res.cloudinary.com/deb6scajo/image/upload/v1640784817/avatars/sample_dp_luhfir.png');
 
     const alert = useAlert();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+
+    //testing image crop
+
+    const [upImg, setUpImg] = useState();
+    const imgRef = useRef(null);
+    const previewCanvasRef = useRef(null);
+    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
+    const [completedCrop, setCompletedCrop] = useState(null);
+    const [confirm, setConfirm] = useState(false);
+
+    //testing crop constants end
+
+
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.set('name', name);
+        formData.set('email', email);
+        formData.set('password', password);
+        formData.set('avatar', avatar);
+
+        dispatch(register(formData))
+    }
+
+    const onChange = (e) => {
+
+
+        if (e.target.name === 'avatar') {
+
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    // setAvatarPreview(reader.result)
+                    setAvatar(reader.result)
+                }
+            }
+
+            // console.log(reader.readAsDataURL(e.target.files[0]))
+
+            reader.readAsDataURL(e.target.files[0]);
+
+        } else {
+
+            setUser({
+                ...user,
+                [e.target.name]: e.target.value
+            })
+
+
+        }
+    }
+
+    //image crop test start
+    const onSelectFile = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const reader = new FileReader();
+            reader.addEventListener('load', () => setUpImg(reader.result));
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
+    const onLoad = useCallback((img) => {
+        imgRef.current = img;
+    }, []);
+
+
 
     useEffect(() => {
 
@@ -39,47 +137,42 @@ const Register = () => {
             dispatch(clearErrors())
         }
 
-    }, [dispatch, alert, isAuthenticated, error, navigate])
-
-    const submitHandler = (e) => {
-        e.preventDefault();
-
-        const formData = new FormData();
-        formData.set('name', name);
-        formData.set('email', email);
-        formData.set('password', password);
-        formData.set('avatar', avatar);
-        
-        dispatch(register(formData))
-    }
-
-    const onChange = (e) => {
-
-        
-        if(e.target.name === 'avatar'){
-        
-
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                if(reader.readyState === 2) {
-                    setAvatarPreview(reader.result)
-                    setAvatar(reader.result)
-                }
-            }
-
-            reader.readAsDataURL(e.target.files[0]);
-
-        }else {
-
-            setUser({
-                ...user,
-                [e.target.name] : e.target.value
-            })
-
-
+        //testing crop start
+        if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
+            return;
         }
-    }
+
+        const image = imgRef.current;
+        const canvas = previewCanvasRef.current;
+        const crop = completedCrop;
+
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        const ctx = canvas.getContext('2d');
+        const pixelRatio = window.devicePixelRatio;
+
+        canvas.width = crop.width * pixelRatio * scaleX;
+        canvas.height = crop.height * pixelRatio * scaleY;
+
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        ctx.imageSmoothingQuality = 'high';
+
+        ctx.drawImage(
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width * scaleX,
+            crop.height * scaleY
+        );
+
+        //testing crop end
+
+    }, [dispatch, alert, isAuthenticated, error, navigate, completedCrop])
+
 
     return (
         <Fragment>
@@ -127,13 +220,13 @@ const Register = () => {
                             />
                         </div>
 
-                        <div className='form-group'>
+                        {/* <div className='form-group'>
                             <label htmlFor='avatar_upload'>Avatar</label>
                             <div className='d-flex align-items-center'>
                                 <div>
                                     <figure className='avatar me-3 item-rtl'>
                                         <img
-                                            src={avatarPreview }
+                                            src={avatarPreview}
                                             className='rounded-circle'
                                             alt='Avatar preview'
                                         />
@@ -147,20 +240,61 @@ const Register = () => {
                                         id='customFile'
                                         accept='images/*'
                                         onChange={onChange}
-                                        
+
                                     />
                                     <label className='custom-file-label' htmlFor='customFile'>
                                         Choose Avatar
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
+
+                        {/* testing crop start */}
+                        <Fragment>
+                            <div>
+                                <input type="file" accept="image/*" name="avatar" onChange={(e)=> {onSelectFile(e)}} />
+                            </div>
+                            <ReactCrop
+                                src={upImg}
+                                onImageLoaded={onLoad}
+                                crop={crop}
+                                onChange={(c) => setCrop(c)}
+                                onComplete={(c) => setCompletedCrop(c)}
+                            />
+                            <div>
+                                <canvas
+                                    ref={previewCanvasRef}
+                                    // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
+                                    style={{
+                                        width: Math.round(completedCrop?.width ?? 0),
+                                        height: Math.round(completedCrop?.height ?? 0)
+                                    }}
+                                />
+                            </div>
+                           
+                            <button
+                                type="button"
+                                className={`btn btn-block me-3 py-3 ${confirm ? 'bg-success' : 'bg-warning'}`}
+                                disabled={!completedCrop?.width || !completedCrop?.height}
+                                onClick={() =>
+                                    {
+                                        
+                                        setAvatar(previewCanvasRef.current.toDataURL())
+                                        setConfirm(true)
+                                        // generateDownload(previewCanvasRef.current, completedCrop)
+                                    }
+                                }
+                            >
+                                Confirm crop
+                            </button>
+                        </Fragment>
+                        {/* testing crop end */}
 
                         <button
                             id="register_button"
                             type="submit"
                             className="btn btn-block py-3"
-                            disabled={ loading ? true : false }
+                            disabled={confirm && !loading ? false : true}
                         >
                             REGISTER
                         </button>

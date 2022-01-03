@@ -99,6 +99,8 @@ exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
 
 // update produt => /api/v1/product/:id
 exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
+
+
     let product = await Product.findById(req.params.id);
     if (!product) {
         return next(new ErrorHandler('Product not found', 404))

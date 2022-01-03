@@ -6,7 +6,24 @@ import CheckoutSteps from './CheckoutSteps';
 import { useAlert } from 'react-alert'
 
 import { createOrder, clearErrors } from '../../actions/orderActions';
+import axios from 'axios';
 
+
+function loadScript(src) {
+    return new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = src
+        document.body.appendChild(script)
+
+        script.onload = () => {
+            resolve(true)
+        }
+        script.onerror = () => {
+            resolve(false)
+        }
+
+    })
+}
 
 const ConfirmOrder = () => {
 
@@ -19,23 +36,25 @@ const ConfirmOrder = () => {
     const { error } = useSelector(state => state.newOrder);
 
     const [paymentMethod, setPaymentMethod] = useState('')
+    const [paymentId, setPaymentId] = useState(null);
+    // const [orderId, setOrderId] = useState(null);
+    // const [signature, setSignature] = useState(null);
 
 
     /* ------------------------- calculate order prices ------------------------- */
     const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
     const shippingPrice = itemsPrice > 200 ? 0 : 25
     const taxPrice = Number((0.05 * itemsPrice).toFixed(2));
-    const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
+    const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
 
     /* ---------------------- calculate order price finish ---------------------- */
 
-
-    const orderInfo = {
-        itemsPrice: itemsPrice.toFixed(2),
-        shippingPrice,
-        taxPrice,
-        totalPrice
-    }
+    // const orderInfo = {
+    //     itemsPrice: itemsPrice.toFixed(2),
+    //     shippingPrice,
+    //     taxPrice,
+    //     totalPrice
+    // }
 
 
     // const paymentData = {
@@ -48,7 +67,7 @@ const ConfirmOrder = () => {
         itemsPrice: itemsPrice.toFixed(2),
         shippingPrice,
         taxPrice,
-        totalPrice
+        totalPrice,
     }
 
 
@@ -60,16 +79,21 @@ const ConfirmOrder = () => {
         }
 
 
+
     }, [dispatch, error, alert]);
 
 
 
     const proceedToPayment = () => {
 
+        if (paymentMethod === 'Razorpay') {
+            displayRazorpay();
+        }
 
-        sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))
 
-        navigate('/payment')
+        // sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo))
+
+        // navigate('/payment')
     }
 
     const cashOnDelivery = () => {
@@ -84,6 +108,86 @@ const ConfirmOrder = () => {
         navigate('/success')
 
     }
+
+    const razorPaySuccess = () => {
+        order.paymentInfo = {
+            id: paymentId,
+            status: 'success'
+        }
+
+        dispatch(createOrder(order))
+
+        navigate('/success')
+    }
+
+    async function displayRazorpay() {
+
+        const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+
+        if (!res) {
+            alert.error('Razorpay sdk failed to load. Please try again.')
+            return
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        // const orderData = {
+        //     amount: totalPrice
+        // }
+        try {
+            var response = await axios.post('/api/v1/razorpay', order, config)
+
+            console.log(response)
+        } catch (error) {
+            console.log(error.response.data.errorMessage)
+        }
+
+
+        // console.log(response)
+
+        if (response) {
+
+            var options = {
+                "key": "rzp_test_toTgvsLqs5fQjG", // Enter the Key ID generated from the Dashboard
+                "amount": response.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "OliveZone",
+                "description": "Complete payment to place your order",
+                "image": "/images/logo2.png",
+                "order_id": response.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    setPaymentId(response.razorpay_payment_id);
+                    // setOrderId(response.razorpay_order_id);
+                    // setSignature(response.razorpay_signature);
+                    razorPaySuccess();
+                    //alert.success(response.razorpay_payment_id);
+                    // alert.success(response.razorpay_order_id);
+                    // alert.success(response.razorpay_signature)
+                },
+                "prefill": {
+                    "name": user.name,
+                    "email": user.email,
+                    "contact": shippingInfo.phoneNo
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#e0a85a"
+                }
+            };
+            var paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } else {
+            alert.error('Something went wrong, please try again')
+        }
+    }
+
+
 
     return (
         <Fragment>

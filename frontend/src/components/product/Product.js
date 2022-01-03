@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 const Product = ({ product, col }) => {
@@ -20,7 +20,16 @@ const Product = ({ product, col }) => {
                         </div>
                         <span id="no_of_reviews">({product.numOfReviews} Reviews)</span>
                     </div>
-                    <p className="card-text">₹ {product.price}</p>
+                    {product.offerPercentage ? (
+                        <Fragment>
+                            <p className="" style={{ textDecoration: 'line-through', color: '#9c9ea1' }}>₹ {product.price}</p>
+                            <p style={{color:'#db3725'}}>{product.offerPercentage}% off. Grab the deal now !</p>
+                            <h4 className="card-text" style={{color:'#3cb807', fontWeight:'bold'}}>₹ {product.offerPrice}</h4>
+                        </Fragment>
+                    ) : (
+                        <p className="card-text">₹ {product.price}</p>
+
+                    )}
                     <Link to={`/product/${product._id}`} id="view_btn" className="btn btn-block">View Details</Link>
                 </div>
             </div>
