@@ -36,6 +36,10 @@ import {
     UPDATE_USER_REQUEST,
     UPDATE_USER_SUCCESS,
     UPDATE_USER_RESET,
+    BLOCK_USER_FAIL,
+    BLOCK_USER_REQUEST,
+    BLOCK_USER_SUCCESS,
+    BLOCK_USER_RESET,
     DELETE_USER_FAIL,
     DELETE_USER_REQUEST,
     DELETE_USER_SUCCESS,
@@ -108,6 +112,7 @@ export const userReducer = (state = {}, action) => {
         case UPDATE_PROFILE_REQUEST:
         case UPDATE_PASSWORD_REQUEST:
         case UPDATE_USER_REQUEST:
+        case BLOCK_USER_REQUEST:
         case DELETE_USER_REQUEST:
             return {
                 ...state,
@@ -116,6 +121,7 @@ export const userReducer = (state = {}, action) => {
         case UPDATE_PROFILE_SUCCESS:
         case UPDATE_PASSWORD_SUCCESS:
         case UPDATE_USER_SUCCESS:
+        case BLOCK_USER_SUCCESS:
 
             return {
                 ...state,
@@ -132,6 +138,7 @@ export const userReducer = (state = {}, action) => {
         case UPDATE_PROFILE_RESET:
         case UPDATE_PASSWORD_RESET:
         case UPDATE_USER_RESET:
+        case BLOCK_USER_RESET:
 
             return {
                 ...state,
@@ -147,6 +154,7 @@ export const userReducer = (state = {}, action) => {
         case UPDATE_PASSWORD_FAIL:
         case UPDATE_USER_FAIL:
         case DELETE_USER_FAIL:
+        case BLOCK_USER_FAIL:
 
             return {
                 ...state,

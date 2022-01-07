@@ -122,6 +122,28 @@ const ProductDetails = () => {
         dispatch(newReview(formData));
     }
 
+    var netOfferPercentage = 0
+    var netOfferPrice = 0
+    var offerDetails
+
+    if (product.offerPercentage <= product.subCategoryOfferPercentage) {
+
+        if (product.subCategoryOfferPercentage !== 0) {
+            netOfferPercentage = product.subCategoryOfferPercentage
+            netOfferPrice = product.subCategoryOfferPrice
+            offerDetails = product.subCategoryOfferDetails
+        }else {
+            netOfferPercentage = product.offerPercentage
+            netOfferPrice = product.offerPrice
+            offerDetails = product.offerDetails
+        }
+        
+    } else {
+        netOfferPercentage = product.offerPercentage
+        netOfferPrice = product.offerPrice
+        offerDetails = product.offerDetails
+    }
+
     return (
         <Fragment>
             {loading ? <Loader /> : (
@@ -153,18 +175,18 @@ const ProductDetails = () => {
                             <hr />
 
                             <div className="d-flex">
-                                {product.offerPercentage > 0 ? (
+                                {netOfferPercentage > 0 ? (
                                     <Fragment>
-                                        <p className="me-2" id="" style={{textDecoration:'line-through', color:'#9c9ea1'}}>₹ {product.price}</p>
-                                        <h5 className="me-3">Buy now at only</h5>
-                                        <p id="product_price" style={{color: 'green'}}>₹ {product.offerPrice}</p>
+                                        <p className="me-2" id="" style={{textDecoration:'line-through', color:'red'}}>₹ {product.price}</p>
+                                        <h5 className="me-3">With {netOfferPercentage}% off, Buy now at only</h5>
+                                        <p id="product_price" style={{color: 'green'}}>₹ {netOfferPrice}</p>
                                     </Fragment>
                                 ) : (
                                     <p id="product_price">₹ {product.price}</p>
 
                                 )}
                             </div>
-                            {product.offerDetails && <p>{product.offerDetails}</p>}
+                            {product && <p>{offerDetails}</p>}
                             <div className="stockCounter d-inline">
                                 <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
 

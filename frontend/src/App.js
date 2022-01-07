@@ -34,6 +34,9 @@ import UsersList from './components/admin/UsersList';
 import UpdateUser from './components/admin/UpdateUser';
 import ProductReviews from './components/admin/ProductReviews';
 import OrderDetails from './components/order/OrderDetails';
+import CategoryList from './components/admin/CategoryList';
+import UpdateCategory from './components/admin/UpdateCategory';
+import SalesReport from './components/admin/SalesReport';
 
 // Payment
 // import { Elements } from '@stripe/react-stripe-js'
@@ -106,6 +109,9 @@ function App() {
           <Route path="/admin/users" element={<UsersList />} />
           <Route path="/admin/user/:id" element={<UpdateUser />} />
           <Route path="/admin/reviews" element={<ProductReviews />} />
+          <Route path="/admin/categories" element={<CategoryList />} />
+          <Route path="/admin/category/:id" element={<UpdateCategory />} />
+          <Route path="/admin/salesreport" element={<SalesReport />} />
 
         </Routes>
         

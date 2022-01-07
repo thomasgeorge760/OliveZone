@@ -56,6 +56,11 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Invalid email or password', 401));
     }
 
+    /* ----------------------- checking if blocked or not ----------------------- */
+    if(user.isBlocked) {
+        return next(new ErrorHandler('User is blocked..! Contact admin',400));
+    }
+
     /* --------------------- checking if password is correct -------------------- */
 
     const isPasswordMatched = await user.comparePassword(password);
@@ -285,6 +290,30 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
 
 
     const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true
+    })
+})
+
+/* -------------------------------------------------------------------------- */
+/*                                 block user                                 */
+/* -------------------------------------------------------------------------- */
+exports.blockUser = catchAsyncErrors(async (req, res, next) => {
+
+    const user = await User.findById(req.params.id)
+
+    if(user.isBlocked) {
+        user.isBlocked = false;
+    } else {
+        user.isBlocked = true;
+    }
+
+    await User.findByIdAndUpdate(req.params.id, user, {
         new: true,
         runValidators: true,
         useFindAndModify: false

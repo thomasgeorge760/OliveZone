@@ -14,13 +14,25 @@ const productSchema = new mongoose.Schema({
         maxLength: [5, 'product name cannot exceed 5 char']
     },
     offerPrice: {
-        type: Number
+        type: Number,
+        default: 0
     },
     offerPercentage: {
       type: Number,
       default: 0
     },
     offerDetails: {
+        type: String
+    },
+    subCategoryOfferPrice: {
+        type: Number,
+        default: 0
+    },
+    subCategoryOfferPercentage: {
+      type: Number,
+      default: 0
+    },
+    subCategoryOfferDetails: {
         type: String
     },
     description: {
@@ -46,24 +58,12 @@ const productSchema = new mongoose.Schema({
     ],
     category: {
         type: String,
-        required: [true, 'enter product category'],
-        enum: {
-            values: [
-                'Electronics',
-                'Cameras',
-                'Laptops',
-                'Accessories',
-                'Headphones',
-                'Food',
-                'Books',
-                'Clothes/shoes',
-                'Beauty/health',
-                'Sports',
-                'Outdoor',
-                'Home'
-            ],
-            message: 'please select correct category for product'
-        }
+        required: [true, 'select product category'],
+        
+    },
+    subCategory: {
+        type: String,
+        required: [true, 'select product subCategory']
     },
     seller: {
         type: String,

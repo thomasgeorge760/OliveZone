@@ -2,6 +2,25 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 const Product = ({ product, col }) => {
+
+    var netOfferPercentage = 0
+    var netOfferPrice = 0
+
+    if (product.offerPercentage <= product.subCategoryOfferPercentage) {
+
+        if (product.subCategoryOfferPercentage !== 0) {
+            netOfferPercentage = product.subCategoryOfferPercentage
+            netOfferPrice = product.subCategoryOfferPrice
+        }else {
+            netOfferPercentage = product.offerPercentage
+            netOfferPrice = product.offerPrice
+        }
+        
+    } else {
+        netOfferPercentage = product.offerPercentage
+        netOfferPrice = product.offerPrice
+    }
+
     return (
         <div key={product._id} className={`col-sm-12 col-md-6 col-lg-${col} my-3`}>
             <div className="card p-3 rounded">
@@ -20,11 +39,12 @@ const Product = ({ product, col }) => {
                         </div>
                         <span id="no_of_reviews">({product.numOfReviews} Reviews)</span>
                     </div>
-                    {product.offerPercentage ? (
+                    {netOfferPercentage !== 0 ? (
                         <Fragment>
-                            <p className="" style={{ textDecoration: 'line-through', color: '#9c9ea1' }}>₹ {product.price}</p>
-                            <p style={{color:'#db3725'}}>{product.offerPercentage}% off. Grab the deal now !</p>
-                            <h4 className="card-text" style={{color:'#3cb807', fontWeight:'bold'}}>₹ {product.offerPrice}</h4>
+                            <p style={{ color: '#db3725' }}>{netOfferPercentage}% off. Grab the deal now !</p>
+                            <h5 className="" style={{ textDecoration: 'line-through', color: '#9c9ea1' }}>₹ {product.price}</h5>
+                            
+                            <h4 className="card-text" style={{ color: '#3cb807', fontWeight: 'bold' }}>₹ {netOfferPrice}</h4>
                         </Fragment>
                     ) : (
                         <p className="card-text">₹ {product.price}</p>

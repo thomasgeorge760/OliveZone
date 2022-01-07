@@ -11,7 +11,7 @@ const Sidebar = () => {
                     </li>
 
                     <li>
-                        <Link to="/admin/statistics"><i className="fa fa-line-chart"></i> Statistics</Link>
+                        <Link to="/admin/salesreport"><i className="fa fa-line-chart"></i> SalesReport</Link>
                     </li>
 
                     <li>
@@ -35,10 +35,10 @@ const Sidebar = () => {
                             <li>
                                 <Link to="/admin/categories"><i className="fa fa-list"></i> All</Link>
                             </li>
-
+{/* 
                             <li>
                                 <Link to="/admin/category"><i className="fa fa-plus"></i> Create</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </li>
 

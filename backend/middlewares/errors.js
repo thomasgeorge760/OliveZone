@@ -53,7 +53,7 @@ module.exports = (err, req, res, next) => {
 
         res.status(error.statusCode).json({
             success: false,
-            message: error.message || 'Internal server error'
+            errorMessage: error.message || 'Internal server error'
         })
     }
 

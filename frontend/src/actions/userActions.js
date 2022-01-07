@@ -33,6 +33,9 @@ import {
     UPDATE_USER_FAIL,
     UPDATE_USER_REQUEST,
     UPDATE_USER_SUCCESS,
+    BLOCK_USER_FAIL,
+    BLOCK_USER_REQUEST,
+    BLOCK_USER_SUCCESS,
     DELETE_USER_FAIL,
     DELETE_USER_REQUEST,
     DELETE_USER_SUCCESS,
@@ -357,6 +360,32 @@ export const getUserDetails = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_DETAILS_FAIL,
+            payload: error.response.data.errorMessage
+        })
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         block/unblock user (admin)                         */
+/* -------------------------------------------------------------------------- */
+export const blockUser = (id) => async (dispatch) => {
+    try {
+
+        dispatch({
+            type: BLOCK_USER_REQUEST
+        })
+
+        const { data } = await axios.put(`/api/v1/admin/blockuser/${id}`)
+
+        dispatch({
+            type: BLOCK_USER_SUCCESS,
+            payload: data.success
+        })
+
+
+    } catch (error) {
+        dispatch({
+            type: BLOCK_USER_FAIL,
             payload: error.response.data.errorMessage
         })
     }
