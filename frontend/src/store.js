@@ -2,9 +2,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { newProductReducer, newReviewReducer, productDetailsReducer, productReducer, productReviewsReducer, productsReducer, reviewReducer } from './reducers/productReducers';
-import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer } from './reducers/userReducers';
+import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer, blockDataReducer } from './reducers/userReducers';
 import { cartReducer } from './reducers/cartReducers';
-import { myOrdersReducer, newOrderReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from './reducers/orderReducers';
+import { myOrdersReducer, newOrderReducer, orderDetailsReducer, allOrdersReducer, orderReducer, weekDataReducer } from './reducers/orderReducers';
 import { categoriesReducer, categoryDetailsReducer, newCategoryReducer } from './reducers/categoryReducers';
 
 const reducer = combineReducers({
@@ -29,6 +29,8 @@ const reducer = combineReducers({
     categories: categoriesReducer,
     newCategory: newCategoryReducer,
     categoryDetails: categoryDetailsReducer,
+    blockData: blockDataReducer,
+    weekData: weekDataReducer
 })
 
 let initialState = {

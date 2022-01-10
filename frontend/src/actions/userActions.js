@@ -39,6 +39,9 @@ import {
     DELETE_USER_FAIL,
     DELETE_USER_REQUEST,
     DELETE_USER_SUCCESS,
+    BLOCKDATA_FAIL,
+    BLOCKDATA_REQUEST,
+    BLOCKDATA_SUCCESS,
 
 } from "../constants/userConstants";
 
@@ -413,6 +416,31 @@ export const deleteUser = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_USER_FAIL,
+            payload: error.response.data.errorMessage
+        })
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             block data (admin)                             */
+/* -------------------------------------------------------------------------- */
+export const blockData = () => async (dispatch) => {
+    try {
+
+        dispatch({
+            type: BLOCKDATA_REQUEST
+        })
+
+        const { data } = await axios.get('/api/v1/admin/blocked')
+
+        dispatch({
+            type: BLOCKDATA_SUCCESS,
+            payload: data.users
+        })
+
+    } catch (error) {
+        dispatch({
+            type: BLOCKDATA_FAIL,
             payload: error.response.data.errorMessage
         })
     }

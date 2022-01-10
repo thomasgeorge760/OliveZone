@@ -345,3 +345,22 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
         success: true
     })
 })
+
+
+/* -------------------------------------------------------------------------- */
+/*               blocked users and unblocked users count (admin)              */
+/* -------------------------------------------------------------------------- */
+exports.blockedCount = catchAsyncErrors(async (req, res, next) => {
+    const users = await User.aggregate([{$group: {_id: "$isBlocked", num: {$sum : 1}}}])
+
+    if(!users) {
+        return next(new ErrorHandler('Something went wrong, no users found', 404))
+    }
+
+    res.status(200).json({
+        success: true,
+        users
+    })
+
+
+})

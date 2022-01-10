@@ -4,6 +4,8 @@ import MetaData from '../layouts/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
 import { useAlert } from 'react-alert'
+// import PayPal from "./PayPal";
+import { PayPalButton } from "react-paypal-button-v2";
 
 import { createOrder, clearErrors } from '../../actions/orderActions';
 import axios from 'axios';
@@ -118,6 +120,15 @@ const ConfirmOrder = () => {
         dispatch(createOrder(order))
 
         navigate('/success')
+    }
+
+    const paypalSuccessHandler = (details, data) => {
+        order.paymentInfo = details.id
+
+        dispatch(createOrder(order))
+
+        navigate('/success')
+
     }
 
     async function displayRazorpay() {
@@ -269,8 +280,37 @@ const ConfirmOrder = () => {
                                     </div>
 
                                 </form>
-                                {paymentMethod &&
-                                    <button id="checkout_btn" className="btn btn-primary btn-block" onClick={paymentMethod === 'COD' ? cashOnDelivery : proceedToPayment}>Proceed to {paymentMethod === 'COD' ? 'place order' : 'Payment'}</button>
+                                {paymentMethod && paymentMethod !== 'Paypal' &&
+                                    <button id="checkout_btn" className="btn btn-primary btn-block" onClick={paymentMethod === 'COD' ? cashOnDelivery : proceedToPayment}>Proceed to {paymentMethod === 'COD' ? 'place order' : 'Razorpay'}</button>
+                                }
+
+                                {paymentMethod && paymentMethod === 'Paypal' &&
+                                    <PayPalButton
+
+                                        amount={totalPrice}
+                                        // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                                        onSuccess={(details, data) => {
+                                            console.log(details);
+                                            console.log(data);
+
+                                            //need more work to be done
+
+                                            paypalSuccessHandler(details, data);
+                                            // return instance.post("/placeorder", datas).then((result) => {
+                                            //     if (result) {
+                                            //         swal({
+                                            //             title: "Order placed successfully!",
+                                            //             text: `Delivery expect on ${date}`,
+                                            //             icon: "success",
+                                            //             button: "Aww yiss!",
+                                            //         });
+                                            //     }
+                                            //     navigate('/success')
+                                            // });
+
+                                            //
+                                        }}
+                                    />
                                 }
 
                             </div>

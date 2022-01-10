@@ -8,6 +8,10 @@ import {
     ALL_ORDERS_REQUEST,
     ALL_ORDERS_SUCCESS,
     ALL_ORDERS_FAIL,
+    FILTER_ORDERS_REQUEST,
+    FILTER_ORDERS_SUCCESS,
+    FILTER_ORDERS_RESET,
+    FILTER_ORDERS_FAIL,
     UPDATE_ORDER_REQUEST,
     UPDATE_ORDER_SUCCESS,
     UPDATE_ORDER_RESET,
@@ -19,6 +23,9 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,
+    WEEKDATA_REQUEST,
+    WEEKDATA_SUCCESS,
+    WEEKDATA_FAIL,
     CLEAR_ERRORS
 } from '../constants/orderConstants';
 
@@ -118,6 +125,7 @@ export const orderDetailsReducer = (state = { order: {} }, action) => {
 export const allOrdersReducer = (state = { orders: [] }, action) => {
     switch (action.type) {
         case ALL_ORDERS_REQUEST:
+        case FILTER_ORDERS_REQUEST:
             return {
                 loading: true
             }
@@ -129,7 +137,21 @@ export const allOrdersReducer = (state = { orders: [] }, action) => {
                 totalAmount: action.payload.totalAmount
             }
 
+        case FILTER_ORDERS_SUCCESS:
+            return {
+                loading: false,
+                orders: action.payload.orders,
+                success: action.payload.success
+            }
+
+        case FILTER_ORDERS_RESET:
+            return {
+                ...state,
+                success: false
+            }
+
         case ALL_ORDERS_FAIL:
+        case FILTER_ORDERS_FAIL:
             return {
                 loading: false,
                 error: action.payload
@@ -183,6 +205,40 @@ export const orderReducer = (state = {}, action) => {
                 ...state,
                 isDeleted: false
             }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state;
+    }
+}
+
+export const weekDataReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case WEEKDATA_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case WEEKDATA_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                weekData: action.payload
+            }
+
+        case WEEKDATA_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
+
         case CLEAR_ERRORS:
             return {
                 ...state,

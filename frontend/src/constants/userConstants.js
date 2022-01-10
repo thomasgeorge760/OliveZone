@@ -56,5 +56,10 @@ export const BLOCK_USER_SUCCESS = 'BLOCK_USER_SUCCESS'
 export const BLOCK_USER_RESET = 'BLOCK_USER_RESET'
 export const BLOCK_USER_FAIL = 'BLOCK_USER_FAIL'
 
+//admin graph blocked or unblocked
+export const BLOCKDATA_REQUEST = 'BLOCKDATA_REQUEST'
+export const BLOCKDATA_SUCCESS = 'BLOCKDATA_SUCCESS'
+export const BLOCKDATA_FAIL = 'BLOCKDATA_FAIL' 
+
 
 export const CLEAR_ERRORS = 'CLEAR_ERRORS'

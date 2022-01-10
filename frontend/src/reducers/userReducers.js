@@ -44,6 +44,9 @@ import {
     DELETE_USER_REQUEST,
     DELETE_USER_SUCCESS,
     DELETE_USER_RESET,
+    BLOCKDATA_REQUEST,
+    BLOCKDATA_SUCCESS,
+    BLOCKDATA_FAIL,
 } from "../constants/userConstants";
 
 
@@ -275,6 +278,39 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
 
         case USER_DETAILS_FAIL:
 
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+
+        default:
+            return state;
+    }
+}
+
+export const blockDataReducer = (state = {}, action) => {
+    switch (action.type) {
+
+        case BLOCKDATA_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case BLOCKDATA_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                blockData: action.payload
+            }
+
+        case BLOCKDATA_FAIL:
             return {
                 ...state,
                 loading: false,

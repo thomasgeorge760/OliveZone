@@ -14,7 +14,8 @@ const { registerUser,
     getUserDetails,
     updateUser,
     deleteUser,
-    blockUser} = require('../controllers/authController');
+    blockUser,
+    blockedCount} = require('../controllers/authController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 
 router.route('/register').post(registerUser);
@@ -36,6 +37,7 @@ router.route('/admin/user/:id')
 .delete(isAuthenticatedUser, authorizeRoles('admin'),deleteUser)
 
 router.route('/admin/blockuser/:id').put(isAuthenticatedUser, authorizeRoles('admin'),blockUser)
+router.route('/admin/blocked').get(isAuthenticatedUser, authorizeRoles('admin'),blockedCount)
 
 
 module.exports = router;

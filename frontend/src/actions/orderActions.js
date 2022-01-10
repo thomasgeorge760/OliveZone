@@ -8,6 +8,9 @@ import {
     ALL_ORDERS_REQUEST,
     ALL_ORDERS_SUCCESS,
     ALL_ORDERS_FAIL,
+    FILTER_ORDERS_REQUEST,
+    FILTER_ORDERS_SUCCESS,
+    FILTER_ORDERS_FAIL,
     UPDATE_ORDER_REQUEST,
     UPDATE_ORDER_SUCCESS,
     UPDATE_ORDER_FAIL,
@@ -17,7 +20,10 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    WEEKDATA_REQUEST,
+    WEEKDATA_FAIL,
+    WEEKDATA_SUCCESS
 } from '../constants/orderConstants';
 import axios from 'axios'
 
@@ -56,7 +62,6 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
 export const myOrders = () => async (dispatch) => {
     try {
-
         dispatch({
             type: MY_ORDERS_REQUEST
         })
@@ -124,6 +129,30 @@ export const allOrders = () => async (dispatch) => {
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                             filter orders (admin)                            */
+/* -------------------------------------------------------------------------- */
+export const filterOrders = (from, to) => async (dispatch) => {
+    try {
+        dispatch({
+            type: FILTER_ORDERS_REQUEST
+        });
+
+        const { data } = await axios.get(`/api/v1/admin/orders/sort?from=${from}&to=${to}`)
+
+        dispatch({
+            type: FILTER_ORDERS_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: FILTER_ORDERS_FAIL,
+            payload: error.response.data.errorMessage
+        })
+    }
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                            update order (admin)                            */
@@ -176,6 +205,28 @@ export const deleteOrder = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DELETE_ORDER_FAIL,
+            payload: error.response.data.errorMessage
+        })
+    }
+}
+
+export const weekData = () => async (dispatch) => {
+    try {
+        
+        dispatch({
+            type: WEEKDATA_REQUEST
+        })
+
+        const { data } = await axios.get(`/api/v1/admin/orders/lastweek`)
+
+        dispatch({
+            type: WEEKDATA_SUCCESS,
+            payload: data.weekData
+        })
+
+    } catch (error) {
+        dispatch({
+            type: WEEKDATA_FAIL,
             payload: error.response.data.errorMessage
         })
     }
