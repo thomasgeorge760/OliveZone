@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useReactToPrint } from "react-to-print";
 
 import MetaData from '../layouts/MetaData';
@@ -15,7 +15,6 @@ const SalesReport = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { loading, error, orders, success } = useSelector(state => state.allOrders);
     const { user, isAuthenticated } = useSelector(state => state.auth);
@@ -128,7 +127,7 @@ const SalesReport = () => {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
         </Fragment>

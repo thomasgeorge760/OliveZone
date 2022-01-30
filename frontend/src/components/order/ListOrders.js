@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ const ListOrders = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { loading, error, orders } = useSelector(state => state.myOrders);
     const { isAuthenticated } = useSelector(state => state.auth)
@@ -70,7 +69,7 @@ const ListOrders = () => {
                     )}
                 </Fragment>
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
 
         </Fragment>

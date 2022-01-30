@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { clearErrors, deleteCategory, getCategories, newCategory } from '../../actions/categoryActions';
 import { DELETE_CATEGORY_RESET, NEW_CATEGORY_RESET } from '../../constants/categoryConstants';
 import Loader from '../layouts/Loader';
@@ -13,7 +13,6 @@ function CategoryList() {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { loading, error, categories } = useSelector(state => state.categories);
     const { user, isAuthenticated } = useSelector(state => state.auth);
@@ -159,7 +158,7 @@ function CategoryList() {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/login" />
             )}
 
         </Fragment>

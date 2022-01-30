@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react'
 
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Loader from '../layouts/Loader';
 import MetaData from '../layouts/MetaData';
 
 const Profile = () => {
 
     const { user, loading, isAuthenticated } = useSelector(state => state.auth)
-    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -51,7 +50,7 @@ const Profile = () => {
 
                 </Fragment>
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
         </Fragment>
     )

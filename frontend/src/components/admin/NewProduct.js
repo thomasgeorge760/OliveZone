@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 import Loader from '../layouts/Loader';
@@ -76,6 +76,7 @@ const NewProduct = () => {
         formData.set('price', price);
         formData.set('description', description);
         formData.set('category', category);
+        formData.set('subCategory', subCategory);
         formData.set('stock', stock);
         formData.set('seller', seller);
 
@@ -270,7 +271,7 @@ const NewProduct = () => {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
         </Fragment>

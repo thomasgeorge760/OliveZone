@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import MetaData from '../layouts/MetaData';
 import { countries } from 'countries-list'
 import { useDispatch, useSelector } from 'react-redux';
@@ -120,7 +120,7 @@ const Shipping = () => {
                     </div>
                 </Fragment>
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
 
         </Fragment>

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 
@@ -344,7 +344,7 @@ const UpdateProduct = () => {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
         </Fragment>

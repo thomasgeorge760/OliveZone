@@ -13,13 +13,13 @@ const cloudinary = require('cloudinary');
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
     console.log(req.body.avatar)
-    
+
     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
         folder: 'avatars',
         width: 150,
         crop: 'scale'
     })
-    
+
     const { name, email, password } = req.body;
 
     const user = await User.create({
@@ -57,8 +57,8 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     /* ----------------------- checking if blocked or not ----------------------- */
-    if(user.isBlocked) {
-        return next(new ErrorHandler('User is blocked..! Contact admin',400));
+    if (user.isBlocked) {
+        return next(new ErrorHandler('User is blocked..! Contact admin', 400));
     }
 
     /* --------------------- checking if password is correct -------------------- */
@@ -189,15 +189,33 @@ exports.UpdatePassword = catchAsyncErrors(async (req, res, next) => {
 /*                  update user profile => /api/v1/me/update                  */
 /* -------------------------------------------------------------------------- */
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+
+    const user = await User.findById(req.user.id)
+
+    var addresses = user.addresses
+
+    if (req.body.addressUpdateId !== '') {
+        addresses = addresses.map((address) => {
+            if (address._id.equals(req.body.addressUpdateId)) {
+                address.address = req.body.address;
+                return address;
+            } else {
+                return address;
+            }
+        })
+    } else {
+        addresses.push({ address: req.body.address })
+    }
+
     const newUserData = {
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        addresses
     }
 
     /* ------------------------------ update avatar ----------------------------- */
 
     if (req.body.avatar !== '') {
-        const user = await User.findById(req.user.id)
 
         const image_id = user.avatar.public_id;
         const res = await cloudinary.v2.uploader.destroy(image_id)
@@ -214,7 +232,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
         }
     }
 
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
         runValidators: true,
         useFindAndModify: false
@@ -307,7 +325,7 @@ exports.blockUser = catchAsyncErrors(async (req, res, next) => {
 
     const user = await User.findById(req.params.id)
 
-    if(user.isBlocked) {
+    if (user.isBlocked) {
         user.isBlocked = false;
     } else {
         user.isBlocked = true;
@@ -351,15 +369,38 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 /*               blocked users and unblocked users count (admin)              */
 /* -------------------------------------------------------------------------- */
 exports.blockedCount = catchAsyncErrors(async (req, res, next) => {
-    const users = await User.aggregate([{$group: {_id: "$isBlocked", num: {$sum : 1}}}])
+    const users = await User.aggregate([{ $group: { _id: "$isBlocked", num: { $sum: 1 } } }])
 
-    if(!users) {
+
+    if (!users) {
         return next(new ErrorHandler('Something went wrong, no users found', 404))
     }
 
+
+    var blockedCount = [];
+
+    if (users.length < 2) {
+        if (users[0]._id == 'false') {
+            blockedCount.push(users[0].num);
+            blockedCount.push(0);
+
+        } else {
+            blockedCount.push(0);
+            blockedCount.push(users[0].num);
+        }
+    } else {
+        if (users[0]._id == 'false') {
+            blockedCount.push(users[0].num);
+            blockedCount.push(users[1].num);
+        } else {
+            blockedCount.push(users[1].num);
+            blockedCount.push(users[0].num);
+
+        }
+    }
     res.status(200).json({
         success: true,
-        users
+        blockedCount
     })
 
 

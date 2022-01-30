@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser, getUserDetails, clearErrors } from '../../actions/userActions'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { UPDATE_USER_RESET } from "../../constants/userConstants";
 
 function UpdateUser() {
@@ -135,7 +135,7 @@ function UpdateUser() {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
         </Fragment>

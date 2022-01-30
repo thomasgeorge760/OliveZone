@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 import Loader from '../layouts/Loader';
@@ -15,7 +15,6 @@ const ProcessOrder = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const params = useParams();
 
     const { loading, order={} } = useSelector(state => state.orderDetails)
@@ -173,7 +172,7 @@ const ProcessOrder = () => {
 
                 </Fragment>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
         </Fragment>

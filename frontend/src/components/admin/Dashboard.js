@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import {
     Chart as ChartJS,
     ArcElement,
@@ -22,13 +22,12 @@ import MetaData from '../layouts/MetaData';
 
 const Dashboard = () => {
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { user, isAuthenticated } = useSelector(state => state.auth);
     const { products } = useSelector(state => state.products);
     const { orders, totalAmount, loading } = useSelector(state => state.allOrders);
-    const { loading: blockDataLoading, blockData: blockedCount } = useSelector(state => state.blockData)
+    const { loading: blockDataLoading, blockedCount } = useSelector(state => state.blockData)
     const { loading: salesDataLoading, weekData: weekSalesCount } = useSelector(state => state.weekData)
     // const { users } = useSelector(state => state.allUsers);
 
@@ -93,21 +92,12 @@ const Dashboard = () => {
 
     //doughnutData section
 
-
-    if (blockedCount) {
-        var data1 = []
-        data1.push(blockedCount[0].num)
-        data1.push(blockedCount[1].num)
-    }
-
-
-
     const doughnutData = {
         labels: ['Blocked', 'Unblocked'],
         datasets: [
             {
                 label: 'of Votes',
-                data: data1,
+                data: blockedCount,
                 backgroundColor: [
                     'rgb(166, 25, 20)',
 
@@ -206,7 +196,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             ) : (
-                navigate('/')
+                <Navigate to="/" />
             )}
 
 

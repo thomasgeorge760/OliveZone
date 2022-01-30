@@ -435,7 +435,7 @@ export const blockData = () => async (dispatch) => {
 
         dispatch({
             type: BLOCKDATA_SUCCESS,
-            payload: data.users
+            payload: data.blockedCount
         })
 
     } catch (error) {

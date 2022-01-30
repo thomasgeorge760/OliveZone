@@ -5,7 +5,7 @@ import MetaData from '../layouts/MetaData'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updatePassword, clearErrors } from '../../actions/userActions'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
 
 const UpdatePassword = () => {
@@ -89,7 +89,7 @@ const UpdatePassword = () => {
                     </div>
                 </div> 
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
         </Fragment>
     )

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import MetaData from '../layouts/MetaData';
 // import { useAlert } from 'react-alert'
 // import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ const options = {
 
 const Payment = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     // const alert = useAlert();
     // const stripe = useStripe();
     
@@ -114,7 +114,7 @@ const Payment = () => {
                 </Fragment>
                 </Elements>
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
 
         </Fragment>

@@ -307,7 +307,7 @@ export const blockDataReducer = (state = {}, action) => {
             return {
                 ...state,
                 loading: false,
-                blockData: action.payload
+                blockedCount: action.payload
             }
 
         case BLOCKDATA_FAIL:

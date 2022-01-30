@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 
 const OrderSuccess = () => {
-
-    const navigate = useNavigate();
 
     const { isAuthenticated } = useSelector(state => state.auth)
 
@@ -27,7 +25,7 @@ const OrderSuccess = () => {
                 </div>
                 </Fragment>
             ) : (
-                navigate('/login')
+                <Navigate to="/login" />
             )}
 
 

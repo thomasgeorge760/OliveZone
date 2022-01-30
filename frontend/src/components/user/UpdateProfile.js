@@ -5,13 +5,15 @@ import MetaData from '../layouts/MetaData'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile, loadUser, clearErrors } from '../../actions/userActions'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstants";
 
 const UpdateProfile = () => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [address, setAddress] = useState('')
+    const [addressUpdateId, setAddressUpdateId] = useState('');
     const [avatar, setAvatar] = useState('');
 
     //must add a default avatar before production stage
@@ -57,9 +59,10 @@ const UpdateProfile = () => {
         const formData = new FormData();
         formData.set('name', name);
         formData.set('email', email);
-
+        formData.set('address', address);
+        formData.set('addressUpdateId', addressUpdateId);
         formData.set('avatar', avatar);
-        
+
         dispatch(updateProfile(formData))
     }
 
@@ -114,6 +117,50 @@ const UpdateProfile = () => {
                                     onChange={(e) => setEmail(e.target.value)} />
                             </div>
 
+                            {user.addresses.length > 0 &&
+                                <div className="form-group">
+                                    <label htmlFor="addresses">Saved Addresses</label>
+                                    <div class="list-group"
+                                        id="addresses">
+
+                                        {user.addresses.map(address => {
+                                            return (
+                                                <button type="button"
+                                                    class="list-group-item list-group-item-action"
+                                                    aria-current="true"
+                                                    onClick={() => {
+                                                        setAddressUpdateId(address._id)
+                                                        setAddress(address.address)
+                                                    }}>
+                                                    {address.address}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+                                    {/* <input
+                                        type="text"
+                                        id="address_field"
+                                        className="form-control"
+                                        name='address'
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                    /> */}
+                                </div>
+                            }
+
+                            <div className="form-group">
+                                <label htmlFor="address_field">Address</label>
+                                <input
+                                    type="text"
+                                    id="address_field"
+                                    className="form-control"
+                                    name='address'                                    
+                                    placeholder={'add new address or click on saved address to edit'}
+                                    value={address}
+                                    onChange={(e) => {setAddress(e.target.value)}}
+                                />
+                            </div>
+
                             <div className='form-group'>
                                 <label htmlFor='avatar_upload'>Avatar</label>
                                 <div className='d-flex align-items-center'>
@@ -148,8 +195,8 @@ const UpdateProfile = () => {
                     </div>
                 </div>
             ) : (
-                navigate('/login')
-             )}
+                <Navigate to="/login" />
+            )}
         </Fragment>
     )
 }

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import MetaData from '../layouts/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
@@ -320,7 +320,7 @@ const ConfirmOrder = () => {
                     </div>
                 </Fragment>)
                 : (
-                    navigate('/login')
+                    <Navigate to="/login" />
                 )}
 
         </Fragment>
