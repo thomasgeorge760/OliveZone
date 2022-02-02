@@ -1,11 +1,20 @@
 import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
+import { CLEAR_CART } from '../../constants/cartConstants';
 
 import MetaData from '../layouts/MetaData';
 
 const OrderSuccess = () => {
 
+    const dispatch = useDispatch();
+
+    dispatch({
+        type:CLEAR_CART
+    })
+
+    localStorage.removeItem(`cartItems`)
+    
     const { isAuthenticated } = useSelector(state => state.auth)
 
     return (
