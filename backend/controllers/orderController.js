@@ -172,8 +172,7 @@ exports.lastWeekSales = catchAsyncErrors(async (req, res, next) => {
 
     var date = new Date();
     const to = new Date();
-    date.setDate(date.getDate() - 7);
-    // console.log(to)
+    date.setDate(date.getDate() - 7);   
 
     const orders = await Order.aggregate([{$match: { createdAt: { $gte: date, $lte: to } }},{$group: {_id: { $dayOfWeek: "$createdAt" }, count: {$sum: 1}}},{$sort: {_id: 1}}]);
 
@@ -194,7 +193,9 @@ exports.lastWeekSales = catchAsyncErrors(async (req, res, next) => {
                     i--
                 }
                 
-            } 
+            } else if(weekData.length<7){
+                weekData.push(0)
+            }
         }
     }
 

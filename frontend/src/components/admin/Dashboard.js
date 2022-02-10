@@ -75,13 +75,13 @@ const Dashboard = () => {
         },
     };
 
-    const labels = ['Sunday', 'Monday', 'Tuesday', 'Thursday', 'Friday', 'Saturday'];
+    const labels = ['Sunday', 'Monday', 'Tuesday','Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const data = {
         labels,
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'Sales per day',
                 data: weekSalesCount,
                 backgroundColor: 'rgba(255, 99, 132)',
             }
@@ -136,7 +136,7 @@ const Dashboard = () => {
                                     <div className="col-xl-3 col-sm-6 mb-3">
                                         <div className="card text-white bg-primary o-hidden h-100">
                                             <div className="card-body">
-                                                <div className="text-center card-font-size">Total Revenue<br /> <b>${totalAmount && totalAmount.toFixed(2)}</b>
+                                                <div className="text-center card-font-size">Total Revenue<br /> <b>₹{totalAmount && totalAmount.toFixed(2)}</b>
                                                 </div>
                                             </div>
                                         </div>
@@ -161,12 +161,7 @@ const Dashboard = () => {
                                             <div className="card-body">
                                                 <div className="text-center card-font-size">Out of Stock<br /> <b>{outOfStock}</b></div>
                                             </div>
-                                            <Link className="card-footer text-white clearfix small z-1" to="/admin/outOfStock">
-                                                <span className="float-left">View Details</span>
-                                                <span className="float-right">
-                                                    <i className="fa fa-angle-right"></i>
-                                                </span>
-                                            </Link>
+                                           
                                         </div>
                                     </div>
                                 </div>
